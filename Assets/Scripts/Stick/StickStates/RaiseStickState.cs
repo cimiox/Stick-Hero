@@ -6,8 +6,13 @@ public class RaiseStickState : IStickState
 {
     public IEnumerator DoStateAction(Stick stick)
     {
-        //TODO: Raise logic
-        throw new System.NotImplementedException();
+        while (true)
+        {
+            stick.transform.localScale = new Vector2(stick.transform.localScale.x,
+                stick.transform.localScale.y + stick.parameters.RaiseSpeed * Time.fixedDeltaTime);
+
+            yield return new WaitForFixedUpdate();
+        }
     }
 
     public void Handle(Stick stick)

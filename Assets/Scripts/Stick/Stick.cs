@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class Stick : MonoBehaviour
 {
-    //TODO: Create Scriptable object who save some values about raise speed, or fall time and other data
+    [SerializeField]
+    public StickParameters parameters;
 
     public Coroutine StateAction { get; set; }
 
@@ -23,15 +24,33 @@ public class Stick : MonoBehaviour
 
                 state = value;
 
-                StartCoroutine(state.DoStateAction(this));
+                StateAction = StartCoroutine(state.DoStateAction(this));
             }
         }
     }
 
+
     private void OnEnable()
     {
         State = new IdleStickState();
+
+        TouchHandler.OnTouchDown += TouchHandler_OnTouch;
+        TouchHandler.OnTouchUp += TouchHandler_OnTouch;
     }
+
+
+    private void TouchHandler_OnTouch()
+    {
+        Request();
+    }
+
+
+    private void OnDisable()
+    {
+        TouchHandler.OnTouchDown -= TouchHandler_OnTouch;
+        TouchHandler.OnTouchUp -= TouchHandler_OnTouch;
+    }
+
 
     public void Request()
     {
