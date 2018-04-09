@@ -1,9 +1,12 @@
-﻿using System.Collections;
+﻿using State;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public interface IStickState
+namespace State.StickState
 {
-    void Handle(Stick stick);
-    IEnumerator DoStateAction(Stick stick);
+    public interface IStickState : IState<Stick>
+    {
+        IEnumerator DoStateAction(Stick stick);
+    }
 }

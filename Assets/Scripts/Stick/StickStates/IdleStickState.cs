@@ -2,15 +2,18 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class IdleStickState : IStickState
+namespace State.StickState
 {
-    public IEnumerator DoStateAction(Stick stick)
+    public class IdleStickState : IStickState
     {
-        yield return null;
-    }
+        public IEnumerator DoStateAction(Stick stick)
+        {
+            yield return null;
+        }
 
-    public void Handle(Stick stick)
-    {
-        stick.State = new RaiseStickState();
+        public void Handle(Stick stick)
+        {
+            stick.State = new RaiseStickState();
+        }
     }
 }

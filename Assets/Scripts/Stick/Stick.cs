@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using State.StickState;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -8,6 +9,7 @@ public class Stick : MonoBehaviour
     public StickParameters parameters;
 
     public Coroutine StateAction { get; set; }
+
 
     private IStickState state;
     public IStickState State
@@ -32,14 +34,12 @@ public class Stick : MonoBehaviour
 
     private void OnEnable()
     {
-        State = new IdleStickState();
+        State = new RaiseStickState();
 
-        TouchHandler.OnTouchDown += TouchHandler_OnTouch;
-        TouchHandler.OnTouchUp += TouchHandler_OnTouch;
+        TouchHandler.OnTouchUp += TouchHandler_OnTouchUp;
     }
 
-
-    private void TouchHandler_OnTouch()
+    private void TouchHandler_OnTouchUp()
     {
         Request();
     }
@@ -47,8 +47,7 @@ public class Stick : MonoBehaviour
 
     private void OnDisable()
     {
-        TouchHandler.OnTouchDown -= TouchHandler_OnTouch;
-        TouchHandler.OnTouchUp -= TouchHandler_OnTouch;
+        TouchHandler.OnTouchUp -= TouchHandler_OnTouchUp;
     }
 
 
