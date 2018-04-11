@@ -6,8 +6,20 @@ using UnityEngine;
 public class Ground : MonoBehaviour
 {
     //TODO: Rewrite to simple parameters
-    [SerializeField]
-    private Stick stick;
+    public Stick Stick { get; set; }
+
+    public float Size
+    {
+        get { return transform.lossyScale.x / 2; }
+    }
+
+    public Vector2 EndPosition
+    {
+        get { return new Vector2(
+          transform.position.x + Size,
+          transform.position.y);
+        }
+    }
 
     private void OnEnable()
     {
@@ -15,12 +27,18 @@ public class Ground : MonoBehaviour
     }
 
 
+    private void OnDisable()
+    {
+        TouchHandler.OnTouchUp -= TouchHandler_OnTouchUp;
+    }
+
+
     private void TouchHandler_OnTouchUp()
     {
-        if (stick != null)
+        if (Stick != null)
         {
             transform.localScale = new Vector2(
-                    stick.transform.localScale.y,
+                    Stick.transform.localScale.y,
                     transform.localScale.y);
         }
     }
