@@ -2,30 +2,33 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class FallStickState : IStickState
+namespace State.StickState
 {
-    private const float TARGET_ROTATION = -90;
-
-    public IEnumerator DoStateAction(Stick stick)
+    public class FallStickState : IStickState
     {
-        float startRotation = stick.transform.localRotation.eulerAngles.y;
-        float startTime = Time.realtimeSinceStartup;
-        float fraction = 0f;
+        private const float TARGET_ROTATION = -90;
 
-        while (fraction < 1f)
+        public IEnumerator DoStateAction(Stick stick)
         {
-            fraction = Mathf.Clamp01((Time.realtimeSinceStartup - startTime) / stick.parameters.FallTime);
+            float startRotation = stick.transform.localRotation.eulerAngles.y;
+            float startTime = Time.realtimeSinceStartup;
+            float fraction = 0f;
 
-            stick.transform.rotation = Quaternion.Euler(
-                stick.transform.rotation.eulerAngles.x,
-                stick.transform.rotation.eulerAngles.y,
-                Mathf.Lerp(startRotation, TARGET_ROTATION, fraction));
+            while (fraction < 1f)
+            {
+                fraction = Mathf.Clamp01((Time.realtimeSinceStartup - startTime) / stick.parameters.FallTime);
 
-            yield return null;
+                stick.transform.rotation = Quaternion.Euler(
+                    stick.transform.rotation.eulerAngles.x,
+                    stick.transform.rotation.eulerAngles.y,
+                    Mathf.Lerp(startRotation, TARGET_ROTATION, fraction));
+
+                yield return null;
+            }
         }
-    }
 
-    public void Handle(Stick stick)
-    {
+        public void Handle(Stick stick)
+        {
+        }
     }
 }
