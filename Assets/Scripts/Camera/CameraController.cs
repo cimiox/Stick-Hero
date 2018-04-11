@@ -15,7 +15,19 @@ public class CameraController : MonoBehaviour
     private void OnEnable()
     {
         GameHandler.Instance.OnGameStart += Instance_OnGameStart;
+
+        Screen.OnWindowEnableEvent += Screen_OnWindowEnableEvent;
     }
+
+
+    private void Screen_OnWindowEnableEvent(bool flag, Screen screen)
+    {
+        if (flag && screen is MainScreen)
+        {
+            StartCoroutine(SetPosition(mainScreenPosition));
+        }
+    }
+
 
     private void Instance_OnGameStart()
     {
@@ -24,17 +36,19 @@ public class CameraController : MonoBehaviour
         StartCoroutine(SetPosition(gameScreenPosition));
     }
 
-    private void CurrentLevel_OnLevelEnd(Level arg1, bool arg2)
+
+    private void CurrentLevel_OnLevelEnd(Level level, bool isWin)
     {
-        arg1.OnLevelEnd -= CurrentLevel_OnLevelEnd;
+        level.OnLevelEnd -= CurrentLevel_OnLevelEnd;
 
         GameHandler.Instance.Stage.CurrentLevel.OnLevelEnd += CurrentLevel_OnLevelEnd;
 
         StartCoroutine(SetPosition(new Vector3(
-            transform.position.x + arg1.SpaceBetweenPlatforms,
+            transform.position.x + level.SpaceBetweenPlatforms,
             transform.position.y,
             transform.position.z)));
     }
+
 
     private void Stage_OnStageEnd()
     {
@@ -42,10 +56,13 @@ public class CameraController : MonoBehaviour
         StartCoroutine(SetPosition(mainScreenPosition));
     }
 
+
     private void OnDisable()
     {
         GameHandler.Instance.OnGameStart -= Instance_OnGameStart;
+        Screen.OnWindowEnableEvent -= Screen_OnWindowEnableEvent;
     }
+
 
     private IEnumerator SetPosition(Vector3 endPosition)
     {

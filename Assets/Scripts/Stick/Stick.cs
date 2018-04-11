@@ -42,13 +42,17 @@ public class Stick : MonoBehaviour
         TouchHandler.OnTouchUp += TouchHandler_OnTouchUp;
     }
 
+
     private void TouchHandler_OnTouchDown()
     {
+        TouchHandler.OnTouchDown -= TouchHandler_OnTouchDown;
         Request();
     }
 
+
     private void TouchHandler_OnTouchUp()
     {
+        TouchHandler.OnTouchUp -= TouchHandler_OnTouchUp;
         Request();
     }
 

@@ -6,13 +6,7 @@ using UnityEngine;
 [RequireComponent(typeof(SpriteRenderer))]
 public class Platform : MonoBehaviour
 {
-    /// <summary>
-    /// Size for scale 1 in pixels
-    /// </summary>
-    private const float MINIMUM_SCALE = 1;
-    private const float MAXIMUM_SCALE = 5;
-
-    public const float CENTER_SIZE = 0.1f;
+    public const float CENTER_SIZE = 0.5f;
 
     private Collider2D Collider { get; set; }
     public float SpaceBetweenPlatforms { get; set; }
@@ -43,9 +37,7 @@ public class Platform : MonoBehaviour
     {
         Collider = GetComponent<Collider2D>();
 
-        transform.localScale = new Vector2(
-            UnityEngine.Random.Range(MINIMUM_SCALE, MAXIMUM_SCALE),
-            transform.localScale.y);
+        
 
     }
 

@@ -7,6 +7,7 @@ namespace State.StickState
     public class FallStickState : IStickState
     {
         private const float TARGET_ROTATION = -90;
+        private const string SOUND_FALL_PATH = "";
 
         public IEnumerator DoStateAction(Stick stick)
         {

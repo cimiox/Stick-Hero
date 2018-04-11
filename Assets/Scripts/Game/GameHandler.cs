@@ -14,8 +14,6 @@ public class GameHandler : MonoBehaviour
             {
                 instance = FindObjectOfType<GameHandler>();
 
-                print(FindObjectOfType<GameHandler>());
-
                 if (instance == null)
                 {
                     instance = new GameObject("GameHandler").AddComponent<GameHandler>();
@@ -30,7 +28,19 @@ public class GameHandler : MonoBehaviour
 
     private const string PATH_TO_HERO = "Hero";
 
-    private Vector2 heroStartPosition = new Vector2(1, 3);
+    [SerializeField]
+    private GameObject GameScreen;
+
+    [SerializeField]
+    private Platform StartPlatform;
+
+    [SerializeField]
+    private GameObject MainScreen;
+
+    [SerializeField]
+    private GameObject EndGameScreen;
+
+    private Vector2 heroStartPosition = new Vector2(1, 2);
 
 
     public float Score
@@ -59,15 +69,13 @@ public class GameHandler : MonoBehaviour
 
         DontDestroyOnLoad(gameObject);
 
-        Hero = UnityEngine.Object.Instantiate(Resources.Load<Hero>(PATH_TO_HERO), heroStartPosition, Quaternion.identity);
-
-        PlayGame();
+        CreateHero();
     }
 
 
     public void PlayGame()
     {
-        Stage = new Stage();
+        Stage = new Stage(StartPlatform);
 
         Stage.OnStageEnd += Stage_OnStageEnd;
 
@@ -75,22 +83,50 @@ public class GameHandler : MonoBehaviour
         Hero.transform.rotation = Quaternion.identity;
 
         OnGameStart?.Invoke();
+
+        GameScreen.SetActive(true);
     }
 
 
     private void Stage_OnStageEnd()
     {
         Score = Stage.Scores;
+
+        EndGameScreen.SetActive(true);
+    }
+
+
+    public void ReturnHome()
+    {
+        ClearScene();
+
+        CreateHero();
     }
 
 
     public void RestartGame()
     {
-        Destroy(Stage.GameObject);
-        Destroy(FindObjectOfType<Hero>().gameObject);
+        ClearScene();
 
-        Hero = UnityEngine.Object.Instantiate(Resources.Load<Hero>(PATH_TO_HERO), heroStartPosition, Quaternion.identity);
+        CreateHero();
 
         PlayGame();
+    }
+
+
+    private void CreateHero()
+    {
+        Hero = UnityEngine.Object.Instantiate(Resources.Load<Hero>(PATH_TO_HERO), heroStartPosition, Quaternion.identity);
+    }
+
+
+    private void ClearScene()
+    {
+        if (Stage != null)
+        {
+            Destroy(Stage.GameObject);
+        }
+
+        Destroy(FindObjectOfType<Hero>().gameObject);
     }
 }

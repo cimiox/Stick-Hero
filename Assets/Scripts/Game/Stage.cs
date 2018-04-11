@@ -32,18 +32,17 @@ public class Stage : INotifyPropertyChanged
     public Level CurrentLevel { get; set; }
 
 
-    public Stage()
+    public Stage(Platform startPlatform)
     {
         GameObject = new GameObject("Stage");
 
         PlatformsFactory = new PlatformsFactory(GameObject.transform);
 
-        var currentPlatform = PlatformsFactory.CreatePlatform(null);
-
         var space = UnityEngine.Random.Range(MINIMUM_SPACE, MAXIMUM_SPACE);
 
-        CurrentLevel = new Level(currentPlatform,
-            PlatformsFactory.CreatePlatform(currentPlatform, space));
+        CurrentLevel = new Level(startPlatform,
+            PlatformsFactory.CreatePlatform(startPlatform, space));
+
         CurrentLevel.OnLevelEnd += CurrentLevel_OnLevelEnd;
         CurrentLevel.SpaceBetweenPlatforms = space;
 

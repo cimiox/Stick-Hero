@@ -7,6 +7,8 @@ public class PlatformsFactory
     private const string RESOURCES_PLATFORM_PATH = "Platform";
     private const string RESOURCES_PLATFORM_CENTER_PATH = "PlatformCenter";
     private const float START_PLATFORM_SIZE = 3;
+    private const float MINIMUM_SCALE = 1;
+    private const float MAXIMUM_SCALE = 5;
 
     public Transform Parent { get; set; }
 
@@ -25,6 +27,10 @@ public class PlatformsFactory
             Quaternion.identity);
 
         platform.transform.SetParent(Parent);
+
+        platform.transform.localScale = new Vector2(
+            UnityEngine.Random.Range(MINIMUM_SCALE, MAXIMUM_SCALE),
+            platform.transform.localScale.y);
 
         if (previosPlatform == null)
         {

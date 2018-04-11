@@ -32,11 +32,11 @@ public class Level
         AimPlatform = aimPlatform;
 
         Stick = UnityEngine.Object.Instantiate(Resources.Load<Stick>(PATH_TO_STICK), CurrentPlatform.EndPosition, Quaternion.identity);
-        Stick.transform.SetParent(CurrentPlatform.transform.parent);
+        Stick.transform.SetParent(aimPlatform.transform.parent);
 
         Ground = UnityEngine.Object.Instantiate(Resources.Load<Ground>(PATH_TO_GROUND), CurrentPlatform.EndPosition, Quaternion.identity);
         Ground.Stick = Stick;
-        Ground.transform.SetParent(CurrentPlatform.transform.parent);
+        Ground.transform.SetParent(aimPlatform.transform.parent);
 
         TouchHandler.OnTouchUp += TouchHandler_OnTouchUp;
     }

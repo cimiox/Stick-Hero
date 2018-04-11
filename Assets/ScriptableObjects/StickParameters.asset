@@ -12,4 +12,4 @@ MonoBehaviour:
   m_Name: StickParameters
   m_EditorClassIdentifier: 
   raiseSpeed: 10
-  fallTime: 0.7
+  fallTime: 0.5
