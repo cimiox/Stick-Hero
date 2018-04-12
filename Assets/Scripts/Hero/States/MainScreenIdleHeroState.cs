@@ -1,16 +1,22 @@
-﻿using System.Collections;
+﻿using State.HeroStates;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MainScreenIdleHeroState : IHeroState
+namespace State.HeroStates
 {
-    public IEnumerator StateAction(Hero hero)
+    public class MainScreenIdleHeroState : IHeroState
     {
-        yield return null;
-    }
+        #region IHeroState
+        public IEnumerator StateAction(Hero hero)
+        {
+            yield return null;
+        }
 
-    public void Handle(Hero stateObj)
-    {
-        stateObj.State = new IdleHeroState();
+        public void Handle(Hero stateObj)
+        {
+            stateObj.State = new IdleHeroState();
+        }
+        #endregion
     }
 }

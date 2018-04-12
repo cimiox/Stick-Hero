@@ -6,6 +6,7 @@ using UnityEngine;
 [RequireComponent(typeof(AudioSource))]
 public class SoundsHandler : MonoBehaviour, INotifyPropertyChanged
 {
+    #region Properties
     private static SoundsHandler instance;
     public static SoundsHandler Instance
     {
@@ -24,12 +25,7 @@ public class SoundsHandler : MonoBehaviour, INotifyPropertyChanged
             return instance;
         }
     }
-
-    public event PropertyChangedEventHandler PropertyChanged;
-
-
     public AudioSource AudioSource { get; set; }
-
     public bool IsMute
     {
         get { return System.Convert.ToBoolean(PlayerPrefs.GetInt("IsMute", 0)); }
@@ -45,8 +41,15 @@ public class SoundsHandler : MonoBehaviour, INotifyPropertyChanged
             OnPropertyChanged("IsMute");
         }
     }
+    #endregion
 
 
+    #region Fields
+    public event PropertyChangedEventHandler PropertyChanged;
+    #endregion
+
+
+    #region Unity lifecycle
     private void Awake()
     {
         if (instance != null && instance != this)
@@ -59,8 +62,10 @@ public class SoundsHandler : MonoBehaviour, INotifyPropertyChanged
         AudioSource = GetComponent<AudioSource>();
         AudioSource.enabled = IsMute;
     }
+    #endregion
 
 
+    #region Public methods
     public void ChangeSoundState()
     {
         IsMute = !IsMute;
@@ -72,10 +77,13 @@ public class SoundsHandler : MonoBehaviour, INotifyPropertyChanged
         AudioSource.clip = sound;
         AudioSource.Play();
     }
+    #endregion
 
 
+    #region Private methods
     protected void OnPropertyChanged(string propertyName)
     {
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-    }
+    } 
+    #endregion
 }

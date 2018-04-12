@@ -6,9 +6,12 @@ namespace State.StickState
 {
     public class FallStickState : IStickState
     {
+        #region Fields
         private const float TARGET_ROTATION = -90;
-        private const string SOUND_FALL_PATH = "";
+        private const string SOUND_FALL_PATH = "Sounds/knock";
+        #endregion
 
+        #region IStickState
         public IEnumerator DoStateAction(Stick stick)
         {
             float startRotation = stick.transform.localRotation.eulerAngles.y;
@@ -26,10 +29,14 @@ namespace State.StickState
 
                 yield return null;
             }
+
+            SoundsHandler.Instance.Play(Resources.Load<AudioClip>(SOUND_FALL_PATH));
         }
+
 
         public void Handle(Stick stick)
         {
-        }
+        } 
+        #endregion
     }
 }

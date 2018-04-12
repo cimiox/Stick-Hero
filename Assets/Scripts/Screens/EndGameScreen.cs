@@ -1,24 +1,32 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
-public class EndGameScreen : Screen
+namespace Screens
 {
-    [SerializeField]
-    private Text stageScore;
-    [SerializeField]
-    private Text bestScore;
-
-    protected override void OnEnable()
+    public class EndGameScreen : Screen
     {
-        stageScore.text = GameHandler.Instance.Stage.Scores.ToString();
-        bestScore.text = GameHandler.Instance.Score.ToString();
+        #region Fields
+        [SerializeField]
+        private Text stageScore;
+        [SerializeField]
+        private Text bestScore;
+        #endregion
 
-        OnWindowEnable(true);
-    }
+
+        #region Unity lifecycle
+        protected override void OnEnable()
+        {
+            stageScore.text = GameHandler.Instance.Stage.Scores.ToString();
+            bestScore.text = GameHandler.Instance.Score.ToString();
+
+            OnWindowEnable(true);
+        }
 
 
-    protected override void OnDisable()
-    {
-        OnWindowEnable(false);
+        protected override void OnDisable()
+        {
+            OnWindowEnable(false);
+        }
+        #endregion
     }
 }

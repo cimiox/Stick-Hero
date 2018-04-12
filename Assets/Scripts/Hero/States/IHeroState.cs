@@ -3,7 +3,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public interface IHeroState : IState<Hero>
+namespace State.HeroStates
 {
-    IEnumerator StateAction(Hero hero);
+    public interface IHeroState : IState<Hero>
+    {
+        IEnumerator StateAction(Hero hero);
+    } 
 }

@@ -6,13 +6,14 @@ using UnityEngine;
 
 public class Stick : MonoBehaviour
 {
+    #region Fields
     [SerializeField]
-    public StickParameters parameters;
+    public StickParameters parameters; 
+    #endregion
 
 
+    #region Properties
     public Coroutine StateAction { get; set; }
-
-
     private IStickState state;
     public IStickState State
     {
@@ -32,8 +33,10 @@ public class Stick : MonoBehaviour
             }
         }
     }
+    #endregion
 
 
+    #region Unity lifecycle
     private void OnEnable()
     {
         State = new IdleStickState();
@@ -43,6 +46,15 @@ public class Stick : MonoBehaviour
     }
 
 
+    private void OnDisable()
+    {
+        TouchHandler.OnTouchUp -= TouchHandler_OnTouchUp;
+        TouchHandler.OnTouchDown -= TouchHandler_OnTouchDown;
+    }
+    #endregion
+
+
+    #region Event handlers
     private void TouchHandler_OnTouchDown()
     {
         TouchHandler.OnTouchDown -= TouchHandler_OnTouchDown;
@@ -55,17 +67,13 @@ public class Stick : MonoBehaviour
         TouchHandler.OnTouchUp -= TouchHandler_OnTouchUp;
         Request();
     }
+    #endregion
 
 
-    private void OnDisable()
-    {
-        TouchHandler.OnTouchUp -= TouchHandler_OnTouchUp;
-        TouchHandler.OnTouchDown -= TouchHandler_OnTouchDown;
-    }
-
-
+    #region Public methods
     public void Request()
     {
         State.Handle(this);
-    }
+    } 
+    #endregion
 }

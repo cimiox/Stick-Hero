@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using State.HeroStates;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -6,10 +7,9 @@ using UnityEngine;
 [RequireComponent(typeof(Collider2D))]
 public class Hero : MonoBehaviour
 {
+    #region Properties
     public Level Level { get; set; }
     public Coroutine StateAction { get; set; }
-
-
     private IHeroState state;
     public IHeroState State
     {
@@ -18,21 +18,29 @@ public class Hero : MonoBehaviour
         {
             if (value != state)
             {
-                if (StateAction != null)
+                try
                 {
-                    StopCoroutine(StateAction);
+                    if (StateAction != null)
+                    {
+                        StopCoroutine(StateAction);
+                    }
+
+                    state = value;
+
+                    StateAction = StartCoroutine(state.StateAction(this));
+                }
+                catch (System.Exception)
+                {
                 }
 
-                state = value;
-
-                StateAction = StartCoroutine(state.StateAction(this));
             }
         }
     }
-
     public Rigidbody2D Rigidbody { get; set; }
+    #endregion
 
 
+    #region Unity lifecycle
     private void Awake()
     {
         Rigidbody = GetComponent<Rigidbody2D>();
@@ -48,23 +56,31 @@ public class Hero : MonoBehaviour
     }
 
 
+    private void OnDisable()
+    {
+        GameHandler.Instance.Stage.OnStageStart -= Instance_OnGameStart;
+        TouchHandler.OnTouchUp -= Request;
+    }
+    #endregion
+
+
+    #region Event handlers
     private void Instance_OnGameStart()
     {
         Level = GameHandler.Instance.Stage.CurrentLevel;
 
         Request();
     }
+    #endregion
 
 
-    private void OnDisable()
-    {
-        GameHandler.Instance.Stage.OnStageStart -= Instance_OnGameStart;
-        TouchHandler.OnTouchUp -= Request;
-    }
-
-
+    #region Private methods
+    /// <summary>
+    /// Request state Handle state to another state
+    /// </summary>
     protected void Request()
     {
         State.Handle(this);
-    }
+    } 
+    #endregion
 }

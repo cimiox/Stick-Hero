@@ -1,29 +1,40 @@
-﻿using System.Collections;
+﻿using State.HeroStates;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class IdleHeroState : IHeroState
+namespace State.HeroStates
 {
-    public IEnumerator StateAction(Hero hero)
+    public class IdleHeroState : IHeroState
     {
-        yield return new WaitUntil(() => hero.Level != null);
-        yield return new WaitUntil(() => hero.Level.CurrentPlatform != null);
+        #region Fields
+        private const float TIME_TO_END_POSITION = 0.3f;
+        #endregion
 
-        Vector2 startPosition = hero.transform.position;
-        float startTime = Time.realtimeSinceStartup;
-        float fraction = 0f;
 
-        while (fraction < 1f)
+        #region IHeroState
+        public IEnumerator StateAction(Hero hero)
         {
-            //TODO: Write in scriptable object parameters
-            fraction = Mathf.Clamp01((Time.realtimeSinceStartup - startTime) / 0.3f);
-            hero.transform.position = Vector2.Lerp(startPosition, hero.Level.CurrentPlatform.EndPosition, fraction);
-            yield return null;
-        }
-    }
+            yield return new WaitUntil(() => hero.Level != null);
+            yield return new WaitUntil(() => hero.Level.CurrentPlatform != null);
 
-    public void Handle(Hero stateObj)
-    {
-        stateObj.State = new WalkHeroState();
+            Vector2 startPosition = hero.transform.position;
+            float startTime = Time.realtimeSinceStartup;
+            float fraction = 0f;
+
+            while (fraction < 1f)
+            {
+                fraction = Mathf.Clamp01((Time.realtimeSinceStartup - startTime) / TIME_TO_END_POSITION);
+                hero.transform.position = Vector2.Lerp(startPosition, hero.Level.CurrentPlatform.EndPosition, fraction);
+                yield return null;
+            }
+        }
+
+
+        public void Handle(Hero stateObj)
+        {
+            stateObj.State = new WalkHeroState();
+        }
+        #endregion
     }
 }

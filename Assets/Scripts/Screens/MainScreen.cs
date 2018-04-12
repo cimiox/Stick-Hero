@@ -4,16 +4,21 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-public class MainScreen : Screen
+namespace Screens
 {
-    protected override void OnEnable()
+    public class MainScreen : Screen
     {
-        OnWindowEnable(true);
-    }
+        #region Unity lifecycle
+        protected override void OnEnable()
+        {
+            OnWindowEnable(true);
+        }
 
 
-    protected override void OnDisable()
-    {
-        OnWindowEnable(false);
+        protected override void OnDisable()
+        {
+            OnWindowEnable(false);
+        }
+        #endregion Unity lifecycle
     }
 }

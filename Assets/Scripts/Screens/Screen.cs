@@ -1,15 +1,24 @@
 ﻿using System;
 using UnityEngine;
 
-public abstract class Screen : MonoBehaviour
+namespace Screens
 {
-    public static event Action<bool, Screen> OnWindowEnableEvent;
-
-    protected abstract void OnEnable();
-    protected abstract void OnDisable();
-
-    protected void OnWindowEnable(bool flag)
+    public abstract class Screen : MonoBehaviour
     {
-        OnWindowEnableEvent?.Invoke(flag, this);
+        #region Fields
+        public static event Action<bool, Screen> OnWindowEnableEvent;
+        #endregion
+
+        #region Unity lifecycle
+        protected abstract void OnEnable();
+        protected abstract void OnDisable();
+        #endregion
+
+        #region Private methods
+        protected void OnWindowEnable(bool flag)
+        {
+            OnWindowEnableEvent?.Invoke(flag, this);
+        } 
+        #endregion
     }
 }

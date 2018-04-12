@@ -6,6 +6,7 @@ using UnityEngine;
 
 public static class ScriptableObjectUtility
 {
+    #region Public methods
     public static void CreateAsset<T>() where T : ScriptableObject
     {
         T asset = ScriptableObject.CreateInstance<T>();
@@ -28,5 +29,6 @@ public static class ScriptableObjectUtility
         AssetDatabase.Refresh();
         EditorUtility.FocusProjectWindow();
         Selection.activeObject = asset;
-    }
+    } 
+    #endregion
 }

@@ -5,17 +5,26 @@ using System.ComponentModel;
 using UnityEngine;
 
 /// <summary>
-/// Stage is player game from start to end
+/// Stage is player game from start to death
 /// </summary>
 public class Stage : INotifyPropertyChanged
 {
+    #region INotifyPropertyChanged
+    public event PropertyChangedEventHandler PropertyChanged; 
+    #endregion
+
+
+    #region Fields
     public event Action OnStageStart;
     public event Action OnStageEnd;
-    public event PropertyChangedEventHandler PropertyChanged;
+    
 
     private const float MINIMUM_SPACE = 1;
     private const float MAXIMUM_SPACE = 6;
+    #endregion
 
+
+    #region Properties
     private int scores;
     public int Scores
     {
@@ -26,10 +35,10 @@ public class Stage : INotifyPropertyChanged
             OnPropertyChanged("Scores");
         }
     }
-
     public GameObject GameObject { get; set; }
     public PlatformsFactory PlatformsFactory { get; set; }
-    public Level CurrentLevel { get; set; }
+    public Level CurrentLevel { get; set; } 
+    #endregion
 
 
     public Stage(Platform startPlatform)
@@ -50,6 +59,7 @@ public class Stage : INotifyPropertyChanged
     }
 
 
+    #region Event handlers
     private void CurrentLevel_OnLevelEnd(Level level, bool isWin)
     {
         if (isWin)
@@ -67,11 +77,12 @@ public class Stage : INotifyPropertyChanged
         {
             OnStageEnd?.Invoke();
         }
-    }
-
+    } 
+    
 
     protected void OnPropertyChanged(string propertyName)
     {
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
+    #endregion
 }

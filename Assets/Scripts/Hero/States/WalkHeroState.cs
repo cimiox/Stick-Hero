@@ -2,41 +2,54 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class WalkHeroState : IHeroState
+namespace State.HeroStates
 {
-    public IEnumerator StateAction(Hero hero)
+    public class WalkHeroState : IHeroState
     {
-        yield return new WaitForSeconds(hero.Level.Stick.parameters.FallTime);
+        #region Fields
+        private const float TIME_TO_END_POSITION = 1.5f;
+        private const string SOUND_FALL_PATH = "Sounds/down";
+        #endregion
 
-        Vector2 startPosition = hero.transform.position;
-        float startTime = Time.realtimeSinceStartup;
-        float fraction = 0f;
-        Vector2 endPosition = hero.Level.IsWin ?
-                    new Vector2(hero.Level.AimPlatform.EndPosition.x - hero.transform.localScale.x, hero.Level.Ground.EndPosition.y) :
-                    new Vector2(hero.Level.Ground.EndPosition.x + (hero.transform.localScale.x / 2), hero.Level.Ground.EndPosition.y);
 
-        while (fraction < 1f)
+        #region IHeroState
+        public IEnumerator StateAction(Hero hero)
         {
-            //TODO: Write in scriptable object parameters
-            fraction = Mathf.Clamp01((Time.realtimeSinceStartup - startTime) / 1.5f);
-            hero.Rigidbody.MovePosition(Vector2.Lerp(startPosition, endPosition, fraction));
-            yield return null;
+            yield return new WaitForSeconds(hero.Level.Stick.parameters.FallTime);
+
+            Vector2 startPosition = hero.transform.position;
+            float startTime = Time.realtimeSinceStartup;
+            float fraction = 0f;
+            Vector2 endPosition = hero.Level.IsWin ?
+                        new Vector2(hero.Level.AimPlatform.EndPosition.x - hero.transform.localScale.x, hero.Level.Ground.EndPosition.y) :
+                        new Vector2(hero.Level.Ground.EndPosition.x + (hero.transform.localScale.x / 2), hero.Level.Ground.EndPosition.y);
+
+            while (fraction < 1f)
+            {
+                fraction = Mathf.Clamp01((Time.realtimeSinceStartup - startTime) / TIME_TO_END_POSITION);
+                hero.Rigidbody.MovePosition(Vector2.Lerp(startPosition, endPosition, fraction));
+                yield return null;
+            }
+
+            Handle(hero);
         }
 
-        Handle(hero);
-    }
 
-    public void Handle(Hero stateObj)
-    {
-        if (stateObj.Level.IsWin)
+        public void Handle(Hero stateObj)
         {
-            stateObj.Level = GameHandler.Instance.Stage.CurrentLevel;
+            if (stateObj.Level.IsWin)
+            {
+                stateObj.Level = GameHandler.Instance.Stage.CurrentLevel;
 
-            stateObj.State = new IdleHeroState();
-        }
-        else
-        {
-            stateObj.State = new MainScreenIdleHeroState();
-        }
+                stateObj.State = new IdleHeroState();
+            }
+            else
+            {
+                stateObj.State = new MainScreenIdleHeroState();
+
+                SoundsHandler.Instance.Play(Resources.Load<AudioClip>(SOUND_FALL_PATH));
+            }
+        } 
+        #endregion
     }
 }

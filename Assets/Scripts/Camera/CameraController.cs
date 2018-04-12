@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Screens;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,21 +7,34 @@ using UnityEngine;
 [RequireComponent(typeof(Camera))]
 public class CameraController : MonoBehaviour
 {
+    #region Fields
     private Vector3 mainScreenPosition = new Vector3(0.7f, 6f, -10);
     private Vector3 gameScreenPosition = new Vector3(5.7f, 5f, -10);
 
     private const float Z_POSITION = -10;
     private const float TIME_TO_END_POSITION = 1f;
+    #endregion
 
+
+    #region Unity lifecycle
     private void OnEnable()
     {
         GameHandler.Instance.OnGameStart += Instance_OnGameStart;
 
-        Screen.OnWindowEnableEvent += Screen_OnWindowEnableEvent;
+        Screens.Screen.OnWindowEnableEvent += Screen_OnWindowEnableEvent;
     }
 
 
-    private void Screen_OnWindowEnableEvent(bool flag, Screen screen)
+    private void OnDisable()
+    {
+        GameHandler.Instance.OnGameStart -= Instance_OnGameStart;
+        Screens.Screen.OnWindowEnableEvent -= Screen_OnWindowEnableEvent;
+    }
+    #endregion
+
+
+    #region Private methods
+    private void Screen_OnWindowEnableEvent(bool flag, Screens.Screen screen)
     {
         if (flag && screen is MainScreen)
         {
@@ -57,13 +71,6 @@ public class CameraController : MonoBehaviour
     }
 
 
-    private void OnDisable()
-    {
-        GameHandler.Instance.OnGameStart -= Instance_OnGameStart;
-        Screen.OnWindowEnableEvent -= Screen_OnWindowEnableEvent;
-    }
-
-
     private IEnumerator SetPosition(Vector3 endPosition)
     {
         Vector3 startPosition = transform.position;
@@ -76,5 +83,6 @@ public class CameraController : MonoBehaviour
             transform.position = Vector3.Lerp(startPosition, endPosition, fraction);
             yield return null;
         }
-    }
+    } 
+    #endregion
 }

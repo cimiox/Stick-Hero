@@ -5,9 +5,9 @@ using UnityEngine;
 
 public class Ground : MonoBehaviour
 {
-    //TODO: Rewrite to simple parameters
-    public Stick Stick { get; set; }
-
+    #region Properties
+    public Stick Stick { get; set; } 
+    
     public float Size
     {
         get { return transform.lossyScale.x / 2; }
@@ -20,7 +20,10 @@ public class Ground : MonoBehaviour
           transform.position.y);
         }
     }
+    #endregion
 
+
+    #region Unity lifecycle
     private void OnEnable()
     {
         TouchHandler.OnTouchUp += TouchHandler_OnTouchUp;
@@ -31,8 +34,10 @@ public class Ground : MonoBehaviour
     {
         TouchHandler.OnTouchUp -= TouchHandler_OnTouchUp;
     }
+    #endregion
 
 
+    #region Event handlers
     private void TouchHandler_OnTouchUp()
     {
         if (Stick != null)
@@ -41,5 +46,6 @@ public class Ground : MonoBehaviour
                     Stick.transform.localScale.y,
                     transform.localScale.y);
         }
-    }
+    } 
+    #endregion
 }

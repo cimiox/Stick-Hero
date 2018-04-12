@@ -3,6 +3,7 @@ using UnityEngine;
 
 public class ScreensHandler : MonoBehaviour
 {
+    #region Properties
     private static ScreensHandler instance;
     public static ScreensHandler Instance
     {
@@ -21,11 +22,16 @@ public class ScreensHandler : MonoBehaviour
             return instance;
         }
     }
+    #endregion
 
+
+    #region Fields
     [SerializeField]
-    private Screen[] Screens;
+    private Screens.Screen[] GameScreens;
+    #endregion
 
 
+    #region Unity lifecycle
     private void Awake()
     {
         if (instance != null && instance != this)
@@ -35,15 +41,17 @@ public class ScreensHandler : MonoBehaviour
 
         DontDestroyOnLoad(gameObject);
 
-        Screen.OnWindowEnableEvent += Screen_OnWindowEnableEvent;  
+        Screens.Screen.OnWindowEnableEvent += Screen_OnWindowEnableEvent;
     }
+    #endregion
 
 
-    private void Screen_OnWindowEnableEvent(bool flag, Screen screen)
+    #region Event handlers
+    private void Screen_OnWindowEnableEvent(bool flag, Screens.Screen screen)
     {
         if (flag)
         {
-            foreach (var item in Screens)
+            foreach (var item in GameScreens)
             {
                 if (item != screen)
                 {
@@ -51,5 +59,6 @@ public class ScreensHandler : MonoBehaviour
                 }
             }
         }
-    }
+    } 
+    #endregion
 }

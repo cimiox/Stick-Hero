@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class GameHandler : MonoBehaviour
 {
+    #region Properties
     private static GameHandler instance;
     public static GameHandler Instance
     {
@@ -23,26 +24,6 @@ public class GameHandler : MonoBehaviour
             return instance;
         }
     }
-
-    public event Action OnGameStart;
-
-    private const string PATH_TO_HERO = "Hero";
-
-    [SerializeField]
-    private GameObject GameScreen;
-
-    [SerializeField]
-    private Platform StartPlatform;
-
-    [SerializeField]
-    private GameObject MainScreen;
-
-    [SerializeField]
-    private GameObject EndGameScreen;
-
-    private Vector2 heroStartPosition = new Vector2(1, 2);
-
-
     public float Score
     {
         get { return PlayerPrefs.GetFloat("Score", 0); }
@@ -50,16 +31,35 @@ public class GameHandler : MonoBehaviour
         {
             if (PlayerPrefs.GetFloat("Score", 0) < value)
             {
-                PlayerPrefs.GetFloat("Score", value);
+                PlayerPrefs.SetFloat("Score", value);
             }
         }
     }
-
-
     public Hero Hero { get; set; }
     public Stage Stage { get; set; }
+    #endregion Properties
 
 
+    #region Fields   
+    [SerializeField]
+    private GameObject GameScreen;
+    [SerializeField]
+    private Platform StartPlatform;
+    [SerializeField]
+    private GameObject MainScreen;
+    [SerializeField]
+    private GameObject EndGameScreen;
+    private Vector2 heroStartPosition = new Vector2(1, 2);
+
+
+    public event Action OnGameStart;
+
+
+    private const string PATH_TO_HERO = "Hero";
+    #endregion Fields
+
+
+    #region Unity lifecycle
     private void Awake()
     {
         if (instance != null && instance != this)
@@ -71,8 +71,10 @@ public class GameHandler : MonoBehaviour
 
         CreateHero();
     }
+    #endregion Unity lifecycle
 
 
+    #region Public methods
     public void PlayGame()
     {
         Stage = new Stage(StartPlatform);
@@ -86,15 +88,7 @@ public class GameHandler : MonoBehaviour
 
         GameScreen.SetActive(true);
     }
-
-
-    private void Stage_OnStageEnd()
-    {
-        Score = Stage.Scores;
-
-        EndGameScreen.SetActive(true);
-    }
-
+    
 
     public void ReturnHome()
     {
@@ -112,8 +106,20 @@ public class GameHandler : MonoBehaviour
 
         PlayGame();
     }
+    #endregion Public methods
 
 
+    #region Event handlers
+    private void Stage_OnStageEnd()
+    {
+        Score = Stage.Scores;
+
+        EndGameScreen.SetActive(true);
+    }
+    #endregion Event handlers
+
+
+    #region Private methods
     private void CreateHero()
     {
         Hero = UnityEngine.Object.Instantiate(Resources.Load<Hero>(PATH_TO_HERO), heroStartPosition, Quaternion.identity);
@@ -122,11 +128,23 @@ public class GameHandler : MonoBehaviour
 
     private void ClearScene()
     {
-        if (Stage != null)
+        try
         {
             Destroy(Stage.GameObject);
         }
+        catch (Exception ex)
+        {
+            print(ex.Message);
+        }
 
-        Destroy(FindObjectOfType<Hero>().gameObject);
+        try
+        {
+            Destroy(FindObjectOfType<Hero>().gameObject);
+        }
+        catch (Exception ex)
+        {
+            print(ex.Message);
+        }
     }
+    #endregion Private methods
 }

@@ -4,20 +4,28 @@ using UnityEngine;
 
 public class PlatformsFactory
 {
+    #region Fields
     private const string RESOURCES_PLATFORM_PATH = "Platform";
     private const string RESOURCES_PLATFORM_CENTER_PATH = "PlatformCenter";
     private const float START_PLATFORM_SIZE = 3;
     private const float MINIMUM_SCALE = 1;
     private const float MAXIMUM_SCALE = 5;
+    #endregion
 
-    public Transform Parent { get; set; }
+
+    #region Properties
+    public Transform Parent { get; set; } 
+    #endregion
+
 
     public PlatformsFactory(Transform parent)
     {
         Parent = parent;
     }
 
-    public Platform CreatePlatform(Platform previosPlatform, float space = 0)
+
+    #region Public fields
+    public virtual Platform CreatePlatform(Platform previosPlatform, float space = 0)
     {
         float spaceBetweenPlatforms = space;
 
@@ -46,5 +54,6 @@ public class PlatformsFactory
             Quaternion.identity).transform.SetParent(Parent);
 
         return platform;
-    }
+    } 
+    #endregion
 }

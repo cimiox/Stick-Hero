@@ -1,29 +1,41 @@
 ﻿using UnityEngine.UI;
 
-public class GameScreen : Screen
+namespace Screens
 {
-    [UnityEngine.SerializeField]
-    private Text scoreText;
-
-    protected override void OnEnable()
+    public class GameScreen : Screen
     {
-        GameHandler.Instance.Stage.PropertyChanged += Stage_PropertyChanged;
+        #region Fields
+        [UnityEngine.SerializeField]
+        private Text scoreText;
+        #endregion
 
-        OnWindowEnable(true);
-    }
 
-    private void Stage_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
-    {
-        if (e.PropertyName.Equals("Scores"))
+        #region Unity lifecycle
+        protected override void OnEnable()
         {
-            scoreText.text = (sender as Stage).Scores.ToString();
+            GameHandler.Instance.Stage.PropertyChanged += Stage_PropertyChanged;
+
+            OnWindowEnable(true);
         }
-    }
 
-    protected override void OnDisable()
-    {
-        GameHandler.Instance.Stage.PropertyChanged -= Stage_PropertyChanged;
 
-        OnWindowEnable(false);
+        protected override void OnDisable()
+        {
+            GameHandler.Instance.Stage.PropertyChanged -= Stage_PropertyChanged;
+
+            OnWindowEnable(false);
+        }
+        #endregion
+
+
+        #region Private methods
+        private void Stage_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName.Equals("Scores"))
+            {
+                scoreText.text = (sender as Stage).Scores.ToString();
+            }
+        }
+        #endregion
     }
 }

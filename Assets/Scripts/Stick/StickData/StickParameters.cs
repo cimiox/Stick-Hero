@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class StickParameters : ScriptableObject
 {
+    #region Properties
     [SerializeField]
     private float raiseSpeed;
     public float RaiseSpeed
@@ -18,5 +19,6 @@ public class StickParameters : ScriptableObject
     {
         get { return fallTime; }
         set { fallTime = value; }
-    }
+    } 
+    #endregion
 }

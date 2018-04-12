@@ -8,6 +8,8 @@ using UnityEngine;
 /// </summary>
 public class Level
 {
+
+    #region Fields
     /// <summary>
     /// First parameter get what is level end
     /// Second parameter get if is win
@@ -16,14 +18,18 @@ public class Level
 
     private const string PATH_TO_STICK = "Stick";
     private const string PATH_TO_GROUND = "Ground";
+    #endregion
 
+
+    #region Properties
     public Platform CurrentPlatform { get; set; }
     public Platform AimPlatform { get; set; }
     public Stick Stick { get; set; }
     public Ground Ground { get; set; }
     public int Score { get; set; }
     public bool IsWin { get; set; }
-    public float SpaceBetweenPlatforms { get; set; }
+    public float SpaceBetweenPlatforms { get; set; } 
+    #endregion
 
 
     public Level(Platform currentPlatform, Platform aimPlatform)
@@ -48,6 +54,7 @@ public class Level
     }
 
 
+    #region Private methods
     private void TouchHandler_OnTouchUp()
     {
         IsWin = Ground.EndPosition.x > AimPlatform.transform.position.x && Ground.EndPosition.x < AimPlatform.EndPosition.x;
@@ -69,5 +76,6 @@ public class Level
     private bool IsGroundInCenter(Vector2 groundPos)
     {
         return groundPos.x > AimPlatform.Center - Platform.CENTER_SIZE && groundPos.x < AimPlatform.Center + Platform.CENTER_SIZE;
-    }
+    } 
+    #endregion
 }
